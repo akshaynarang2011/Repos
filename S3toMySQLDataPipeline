@@ -1,0 +1,72 @@
+{
+  "objects": [
+    {
+      "dataFormat": {
+        "ref": "DataFormatId_pCb0h"
+      },
+      "filePath": "s3://source-bucket104/Passenger.csv",
+      "name": "DefaultDataNode1",
+      "id": "DataNodeId_qAxoA",
+      "type": "S3DataNode"
+    },
+    {
+      "name": "DefaultDataFormat1",
+      "id": "DataFormatId_pCb0h",
+      "type": "CSV"
+    },
+    {
+      "failureAndRerunMode": "CASCADE",
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "pipelineLogUri": "s3://pipelinelogs104/",
+      "scheduleType": "ONDEMAND",
+      "name": "Default",
+      "id": "Default"
+    },
+    {
+      "databaseName": "testdb",
+      "*password": "admin123",
+      "name": "DefaultDatabase1",
+      "id": "DatabaseId_cT7ty",
+      "region": "ap-southeast-2",
+      "type": "RdsDatabase",
+      "rdsInstanceId": "mysql1",
+      "username": "admin"
+    },
+    {
+      "resourceRole": "DataPipelineDefaultResourceRole",
+      "role": "DataPipelineDefaultRole",
+      "instanceType": "t2.micro",
+      "name": "DefaultResource1",
+      "id": "ResourceId_kktmo",
+      "type": "Ec2Resource",
+      "terminateAfter": "10 Minutes"
+    },
+    {
+      "createTableSql": "CREATE TABLE passengers(passengerid VARCHAR(30),pclass VARCHAR(30),fname VARCHAR(30),sex VARCHAR(30),age VARCHAR(30),sibsp VARCHAR(30),parch VARCHAR(30),ticket VARCHAR(30),fare VARCHAR(30),cabin VARCHAR(30),embarked VARCHAR(30))",
+      "database": {
+        "ref": "DatabaseId_cT7ty"
+      },
+      "name": "DefaultDataNode2",
+      "insertQuery": "insert into passengers(`passengerid`, `pclass`,`fname`,`sex`, `age`, `sibsp`, `parch`, `ticket` , `fare`, `cabin`, `embarked`) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+      "id": "DataNodeId_gTd36",
+      "type": "MySqlDataNode",
+      "table": "passengers"
+    },
+    {
+      "output": {
+        "ref": "DataNodeId_gTd36"
+      },
+      "input": {
+        "ref": "DataNodeId_qAxoA"
+      },
+      "name": "DefaultCopyActivity1",
+      "id": "CopyActivityId_dgiQ4",
+      "runsOn": {
+        "ref": "ResourceId_kktmo"
+      },
+      "type": "CopyActivity"
+    }
+  ],
+  "parameters": []
+}
