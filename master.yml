@@ -1,0 +1,28 @@
+- name: startContainer
+  hosts: master
+  vars:
+   ansible_python_interpreter: "/usr/bin/python2.7"
+
+  tasks:
+  - name: Get File
+    docker_container:
+      name: getfile
+      image: google/cloud-sdk
+      volumes:
+        - data:/data
+      command: gsutil cp gs://landing_bucket101/employee.csv /data/
+  - name: Remove Container - getfile
+    shell: |
+     docker container stop getfile
+     docker container rm getfile
+  - name: Processing File
+    docker_container:
+      name: process_container
+      image: ubuntu_myimage
+      volumes:
+        - data:/data
+      command: sh /root/proc.sh
+  - name: Remove Container - process_container
+    shell: |
+     docker container stop process_container
+     docker container rm process_container

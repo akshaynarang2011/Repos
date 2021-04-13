@@ -1,0 +1,10 @@
+- name: Create a data container
+  hosts: master
+  become: true
+
+  tasks:
+
+   - name: getfile
+     docker_container:
+      image: nginx
+      name: getfile

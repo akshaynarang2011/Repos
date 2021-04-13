@@ -1,0 +1,10 @@
+- name: startContainer
+  hosts: master
+
+  tasks:
+  - name: GetFile
+    shell: |
+      docker run --name get_file -itd --rm -v data:/data google/cloud-sdk gsutil cp gs://landing_bucket101/employee.csv /data/
+  - name: Processing
+    shell: |
+      docker run --name processing -itd --rm -v data:/data myimage sh /root/proc.sh
