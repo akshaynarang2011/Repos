@@ -6,7 +6,7 @@ name: Deploy Bicep file
 parameters:
 - name: azureServiceConnection
   type: string
-  default: ''
+  default: 'azserviceconn'
 
 variables:
   vmImageName: 'ubuntu-latest'
