@@ -1,0 +1,31 @@
+trigger:
+- main
+
+name: Deploy Bicep file
+
+parameters:
+- name: azureServiceConnection
+  type: string
+  default: ''
+
+variables:
+  vmImageName: 'ubuntu-latest'
+  resourceGroupName: 'myResourceGroup'
+  location: 'australiasoutheast'
+  templateFile: './main.bicep'
+
+pool:
+  vmImage: $(vmImageName)
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(templateFile)'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
+    connectedServiceName: '${{ parameters.azureServiceConnection }}'
